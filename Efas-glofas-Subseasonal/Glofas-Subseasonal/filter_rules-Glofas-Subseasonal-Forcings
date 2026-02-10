@@ -1,0 +1,49 @@
+set tablesVersion=36; # Latest table
+set experimentVersionNumber=0001; 
+set hoursAfterDataCutoff=MISSING; # Should be missing for forecasts
+set minutesAfterDataCutoff=MISSING; # Should be missing for forecasts
+if(defined(typeOfStatisticalProcessing)){
+            set typeOfTimeIncrement = 2; } # it was incorrecte before (3) https://confluence.ecmwf.int/pages/viewpage.action?pageId=363863394
+
+
+set typeOfProcessedData=1;#forecast : https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+set marsClass=43; #All glofas streams are moving into gf class
+set marsStream = 1122; # Extended ensemble prediction system https://github.com/ecmwf/eccodes/blob/develop/definitions/mars/stream.table
+
+#New hydro local concept : branch Hydro-flat-list
+set inputProcessIdentifier=13; #im assuming that its 49r1, But its better to get the value from the forcings generatingProcessIdentifier: https://github.com/ecmwf/eccodes/blob/feature/hydro_flat_list/definitions/grib2/localConcepts/hydro/inputModelVersionConcept.def
+
+set typeOfPostProcessing=0; # Stitched NWP https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
+set typeOfGeneratingProcess=2;# Forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+set backgroundProcess=147; #Always lisflood for glofas 3.1 onward https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
+set generatingProcessIdentifier=41; #Latest version of glofas 'v4-glofas' https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
+set experimentVersionNumber=0001; # For the new datasets we start by expver=1 for the existing datasets we keep the same expver
+set inputOriginatingCentre=98;
+
+
+switch (perturbationNumber) {
+	case '0':
+		set marsType='10';
+
+	default:
+		set marsType='11';
+
+	}
+
+transient anoffsetFirst_tmp = anoffsetFirst; # the LocalSection has these keys for all glofas streams
+transient anoffsetLast_tmp = anoffsetLast;# the LocalSection has these keys for all glofas streams
+transient anoffsetFrequency_temp=anoffsetFrequency;#the LocalSection has these keys for all glofas streams
+
+set grib2LocalSectionNumber=44; # for efas and glofas (Except the reforecast which is using 46) but it should be after the keys :anoffsetFirst,anoffsetLast,anoffsetFrequency and 
+# before the keys offsetToStartOfAnalysisInHours,offsetToStartOfForecastFillupInHours,offsetTimeIncrementInHours
+
+set offsetToStartOfAnalysisInHours=anoffsetFirst_tmp;
+set offsetToStartOfForecastFillupInHours=anoffsetLast_tmp;
+set offsetTimeIncrementInHours=anoffsetFrequency_temp;
+
+write;
+
+
+
+
+

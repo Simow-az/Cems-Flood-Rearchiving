@@ -1,0 +1,16 @@
+#!/bin/bash
+INPUT_FOLDER="/perm/ecm3644/CEMS-FLOOD-DATA-SAMPLES/Samples-EXPVER1"
+RULES_path="/perm/ecm3644/CEMS-FLOOD-DATA-SAMPLES/Samples-EXPVER1"
+grib_filter_path="/perm/maro/ecc_hydro_cems_c3s/adapted/bin"
+
+for file in "$INPUT_FOLDER"/*.grib; do
+    base=$(basename "$file" .grib)
+    echo "Processing: $file"
+    "$grib_filter_path/"grib_filter "$RULES_path/grib_filter_script_EXPVER1_final" "$file" -o "$INPUT_FOLDER/${base}-sample.grib"
+    
+    
+done
+
+echo "All files processed!"
+
+

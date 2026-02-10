@@ -1,0 +1,418 @@
+set tablesVersion=36; # Latest table
+set experimentVersionNumber=0001; 
+set hoursAfterDataCutoff=MISSING; # Should be missing for forecasts
+set minutesAfterDataCutoff=MISSING; # Should be missing for forecasts
+if(defined(typeOfStatisticalProcessing)){
+            set typeOfTimeIncrement = 2; } # it was incorrecte before (3) https://confluence.ecmwf.int/pages/viewpage.action?pageId=363863394
+
+if ( marsClass == 35 )
+{
+
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+	# # # # # # # # # # # # #   Efas   # # # # # # # # # # # # # # # # # # #
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+    if (marsStream==1057 || marsStream == 1059  || marsStream == 1064 || marsStream == 1058)# except reforecasts
+    {
+		set marsClass=42; #All efas streams are moving into ef class
+		set typeOfPostProcessing=0; #None (All efas streams except the subseasonal which is not within this code)
+        set backgroundProcess=147; #Always lisflood for efas
+        set generatingProcessIdentifier=5; #Latest version of efas 'v5-efas'
+	
+	   	transient anoffsetFirst_tmp = anoffsetFirst; # the LocalSection has these keys for all efas streams
+		transient anoffsetLast_tmp = anoffsetLast;# the LocalSection has these keys for all efas streams
+		transient anoffsetFrequency_temp=anoffsetFrequency;#the LocalSection has these keys for all efas streams
+
+        set grib2LocalSectionNumber=44; # for efas and glofas (Except the reforecast which is using 46) but it should be after the keys :anoffsetFirst,anoffsetLast,anoffsetFrequency and 
+		# before the keys offsetToStartOfAnalysisInHours,offsetToStartOfForecastFillupInHours,offsetTimeIncrementInHours
+
+		set offsetToStartOfAnalysisInHours=anoffsetFirst_tmp;
+		set offsetToStartOfForecastFillupInHours=anoffsetLast_tmp;
+		set offsetTimeIncrementInHours=anoffsetFrequency_temp;
+
+		if ( marsStream == 1057 ){ #efas
+			# FC
+			if ( marsType == 9) { 
+				set marsStream = 1025; # efas fc will move to oper fc
+				set typeOfGeneratingProcess = 2;  # Forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+				set typeOfProcessedData = 1; # Forecast products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+
+				switch (inputProcessIdentifier) { # The mars key 'Forcing' is based on the inputProcessIdentifier the first number is for the model and the last three numbers for the version the origin will be center-model (ecmf-ifs)
+ 					case '158':
+                       # set inputModelVersion='13';
+						set inputProcessIdentifier=13;
+					case '15420':
+                       # set inputModelVersion='9';
+						set inputProcessIdentifier=9;
+					case '154':
+						#set inputModelVersion='9';
+						set inputProcessIdentifier=9;
+					case '15319':
+                       # set inputModelVersion='8';
+						set inputProcessIdentifier=8;
+					case '1':
+						#set inputModelVersion='3500';
+						set inputProcessIdentifier=3500;
+					case '119':
+						#set inputModelVersion='3500';
+						set inputProcessIdentifier=3500;
+					case '120':
+						#set inputModelVersion='3500';
+						set inputProcessIdentifier=3500;
+					default:
+						set inputProcessIdentifier='0';
+					   }
+			}
+			# CF
+			if ( marsType == 10) { 
+				set marsStream = 1035 ;# Stream enfo
+				set typeOfGeneratingProcess = 4;  # Ensemble forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+				set typeOfProcessedData = 3; # Control forecast products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+				set typeOfEnsembleForecast = 5; # 	Unperturbed forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
+
+				switch (inputProcessIdentifier) {
+					case '154':
+                        #set inputModelVersion='9';
+						set inputProcessIdentifier=9;
+					case '15420':
+                        #set inputModelVersion='9';
+						set inputProcessIdentifier=9; 
+					case '15419':
+					    #set inputModelVersion='9';
+						set inputProcessIdentifier=9; 
+					case '15820':
+					   # set inputModelVersion='13';
+						set inputProcessIdentifier=13;
+					case '15819':
+					   # set inputModelVersion='13';
+						set inputProcessIdentifier=13;
+					case '158':
+					    #set inputModelVersion='13';
+						set inputProcessIdentifier=13;
+					default:
+					    set inputProcessIdentifier=0;
+					   }
+			}
+			# PF
+            if ( marsType == 11) { 
+				set marsStream = 1035 ; #Stream enfo
+				set typeOfGeneratingProcess =4;  # Ensemble forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+				set typeOfProcessedData =4; # Perturbed forecast products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+				set typeOfEnsembleForecast =6; # 	Perturbed forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
+
+				switch (inputProcessIdentifier) {
+					case '131':
+                        # set inputModelVersion='3000';
+						set inputProcessIdentifier=3000;
+					case '13119':
+						#set inputModelVersion='3000';
+						set inputProcessIdentifier=3000;
+					case '13120':
+						#set inputModelVersion='3000';
+						set inputProcessIdentifier=3000;
+					case '15319':
+						#set inputModelVersion='8';
+						set inputProcessIdentifier=8;
+					case '15420':
+						#set inputModelVersion='9';
+						set inputProcessIdentifier=9; 
+					case '158':
+						#set inputModelVersion='13';
+						set inputProcessIdentifier=13;
+					default:
+					 set inputProcessIdentifier=0;
+					   }
+			}
+			# Fill-Up
+			if ( marsType == 72) { 
+				set marsStream = 1025;				
+				set typeOfGeneratingProcess = 0;  # Analysis https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+				set typeOfProcessedData = 0; # analysis product https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+				switch (inputProcessIdentifier) {
+					case '1':
+						#set inputModelVersion='3500';
+						set inputProcessIdentifier=3500;
+					case '158':
+						#set inputModelVersion='13';
+						set inputProcessIdentifier=13;
+					case '154':
+						#set inputModelVersion='9';
+						set inputProcessIdentifier=9; 
+					case '15420':
+						#set inputModelVersion='9';
+						set inputProcessIdentifier=9; 
+					default:
+						set inputProcessIdentifier=0;
+					   }
+			}
+			# SFO
+			
+			if (marsType == 73) { 
+				 set marsStream = 1025;
+				 set typeOfGeneratingProcess = 0;  # Analysis https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+				 set typeOfProcessedData = 0; # analysis product https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+				 set inputProcessIdentifier=65100;
+			}
+
+	    }
+		# Simulation forced with observations, rfsd (Climatology)
+        if(marsStream == 1059 ) #efcl
+            {
+                        set marsStream = 1256;
+                        set typeOfGeneratingProcess = 9;  # Climatology https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+                        set typeOfProcessedData = 0; # Analysis product https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+                        set inputProcessIdentifier=65100; #7 stands for 'OBS' : first table of section 2.2 https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100;
+            }
+
+		# Seasonal and seasonal reforecasts (The seas5 dataset has its own versions)
+		if(marsStream == 1058 || marsStream == 1064) 
+            {
+                    set marsStream = 1220;
+                    set typeOfGeneratingProcess = 2;  # Forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+                    set typeOfProcessedData = 1; # Forecast product https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+
+                    
+                    switch(inputProcessIdentifier){
+                        case '147': 
+                          #  set inputModelVersion='2';
+                            set inputProcessIdentifier=2; #147 is the generatingProcessIdentifier of SEAS5 (model version)
+                        case '14719':
+                         #   set inputModelVersion='2';
+						    set inputProcessIdentifier=2;
+                        default:
+                            set inputProcessIdentifier=0;
+                          #  set inputModelVersion='0';
+                    }
+            }
+    }
+    if (marsStream == 1063)# reforecasts
+    {   transient inputOriginatingCentre_temp=inputOriginatingCentre;
+        transient inputProcessIdentifier_temp=inputProcessIdentifier;
+
+        set productDefinitionTemplateNumber=61; # ProductDefinitionTemplateNumber for reforecast (Temporary as we dont have postprecessing template)
+		if(defined(typeOfStatisticalProcessing)){
+            set typeOfTimeIncrement = 2; # it was incorrecte before (3) https://confluence.ecmwf.int/pages/viewpage.action?pageId=363863394
+            }
+        set marsClass=42; #All efas streams are moving into class ef
+        set marsStream = 1120;
+		# set typeOfPostProcessing=0; #None (All efas streams except the subseasonal which is not within this code)
+        set backgroundProcess=147; #Always lisflood for efas
+        set generatingProcessIdentifier=5; #Latest version of efas 'v5-efas'
+
+
+	   	transient anoffsetFirst_tmp = anoffsetFirst; # the LocalSection has these keys for all efas streams
+		transient anoffsetLast_tmp = anoffsetLast;# the LocalSection has these keys for all efas streams
+		transient anoffsetFrequency_temp=anoffsetFrequency;#the LocalSection has these keys for all efas streams
+
+        set grib2LocalSectionNumber=46; # for efas and glofas (Except the reforecast which is using 46) but it should be after the keys :anoffsetFirst,anoffsetLast,anoffsetFrequency and 
+		# before the keys offsetToStartOfAnalysisInHours,offsetToStartOfForecastFillupInHours,offsetTimeIncrementInHours
+
+
+		set offsetToStartOfAnalysisInHours=anoffsetFirst_tmp;
+		set offsetToStartOfForecastFillupInHours=anoffsetLast_tmp;
+		set offsetTimeIncrementInHours=anoffsetFrequency_temp;
+        set inputOriginatingCentre=inputOriginatingCentre_temp;
+        set inputProcessIdentifier=inputProcessIdentifier_temp;
+
+
+
+
+		
+		set typeOfGeneratingProcess = 15;  # Hindcast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+        set YearOfModelVersion =2024;
+        set MonthOfModelVersion = 3;
+        set DayOfModelVersion = 2;
+
+		switch (marsType)
+        {
+			case '10':
+				set typeOfEnsembleForecast = 5;  # Unperturbed forecast  https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
+				set typeOfProcessedData = 3; # Control forecast products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+			case '11':
+				set typeOfEnsembleForecast = 6; # Perturbed https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
+				set typeOfProcessedData = 4; # Perturbed forecast products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+
+			default:
+				set typeOfEnsembleForecast=255;
+	    }
+		switch (inputProcessIdentifier_temp) {
+			case '158':
+				#set inputModelVersion='13';
+				set inputProcessIdentifier=13;
+			case '154':
+				#set inputModelVersion='9';
+				set inputProcessIdentifier=9;
+			case '15420':
+				#set inputModelVersion='9';
+				set inputProcessIdentifier=9;
+			default:
+				set inputProcessIdentifier=0;
+               # set inputModelVersion='0';
+			}
+    }
+
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+	# # # # # # # # # # # # # # Glofas # # # # # # # # # # # # # # # # # # # #
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+	if (marsStream == 1060 || marsStream == 1061 || marsStream == 1062 || marsStream == 1066) # Except reforecast
+    { 
+	    set marsClass=43;
+	    set backgroundProcess=147; # Always 147 except for the version 2.1 with lisflood-htessel
+        set generatingProcessIdentifier=41; #Latest version of glofas 'v4-glofas'
+
+		transient anoffsetFirst_tmp = anoffsetFirst;
+		transient anoffsetLast_tmp = anoffsetLast;
+		transient anoffsetFrequency_temp=anoffsetFrequency;
+
+        set grib2LocalSectionNumber=44; # for efas and glofas but it should be after the keys :anoffsetFirst,anoffsetLast,anoffsetFrequency and 
+		# before the keys offsetToStartOfAnalysisInHours,offsetToStartOfForecastFillupInHours,offsetTimeIncrementInHours
+
+		set offsetToStartOfAnalysisInHours=anoffsetFirst_tmp;
+		set offsetToStartOfForecastFillupInHours=anoffsetLast_tmp;
+		set offsetTimeIncrementInHours=anoffsetFrequency_temp;
+	    # Glofas control/perturb/fillup/sfo
+		# the SFO needs the version of ERA5 used and not the IFS,We have to find a solution to replace it
+
+		if(marsStream == 1060) 
+			{
+				set marsStream = 1035; #enfo Ensemble prediction system
+				
+				switch (marsType){
+					case '10':
+						set typeOfEnsembleForecast = 5; #Control forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
+				        set typeOfProcessedData = 3; # Control https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+						set typeOfGeneratingProcess = 4;  # Ensemble forecast for both types cf/pf  https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+                        set typeOfPostProcessing=1 ; # Stitched NWP 24h lagged forcings : https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
+					case '11':
+						set typeOfEnsembleForecast = 6; # Perturbed forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
+				        set typeOfProcessedData = 4; # Perturbed https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+						set typeOfGeneratingProcess = 4;  # ensemble forecast for both types cf/pf  https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+                        set typeOfPostProcessing=1 ; # Stitched NWP 24h lagged forcings : https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
+					case '72':
+				        set typeOfProcessedData = 0; # Analysis products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+						set typeOfGeneratingProcess = 0;  # Analysis  https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+                        set typeOfEnsembleForecast = Missing;
+					case '73':
+						set typeOfProcessedData = 0; # Analysis products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+						set typeOfGeneratingProcess = 0;  # Analysis  https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+                        set typeOfEnsembleForecast = Missing;
+
+					default:
+						set typeOfGeneratingProcess = 255;
+						set typeOfProcessedData = 255;
+
+					   }
+			
+
+				switch (inputProcessIdentifier) {
+					case '158':
+						#set inputModelVersion='13';
+				        set inputProcessIdentifier=13;
+					case '15821':
+						#set inputModelVersion='13';
+				        set inputProcessIdentifier=13;
+					case '154':
+						#set inputModelVersion='9';
+				        set inputProcessIdentifier=9;
+					case '145':
+						set inputProcessIdentifier=65000;  # SFO : The inputProcessIdentifier was never set to the ERA5 generatingProcessIdentifier; instead, the IFS generatingProcessIdentifier was used.
+					
+					default:
+						set inputProcessIdentifier='0';
+					   }
+
+			 }
+		# Glofas Climatology
+		if(marsStream == 1061) 
+			{
+				set marsStream = 1256;
+				set typeOfGeneratingProcess = 9;  
+				set typeOfProcessedData = 0; # Analysis https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table   	
+				switch (inputProcessIdentifier) {
+					case '145':
+						set inputProcessIdentifier=65000; # 5 here refers to ERA5 generatingProcessIdentifier
+					case '147':
+						#set inputModelVersion='2';
+				        set inputProcessIdentifier=65000;
+					default:
+						set inputProcessIdentifier=0;
+					   }
+
+			}
+
+		# Seasonal
+		if(marsStream == 1062 || marsStream == 1066 ) 
+			{
+				set marsStream = 1220;    # mmsf
+				set typeOfGeneratingProcess = 2;  # Forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+				set typeOfProcessedData = 1; # Forecast product https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table 	
+				switch (inputProcessIdentifier) {
+					case '14703':
+						#set inputModelVersion='2';
+				        set inputProcessIdentifier=2;
+
+					default:
+						set inputProcessIdentifier=0;
+					   }
+
+			 }
+
+	 }
+
+	# Dealing differently with the reforecast as the template is different from all the other datasets 
+	if(marsStream == 1065) {
+        transient inputOriginatingCentre_temp=inputOriginatingCentre;
+        transient inputProcessIdentifier_temp=inputProcessIdentifier;
+        set productDefinitionTemplateNumber=61; # ProductDefinitionTemplateNumber for reforecast (Temporary as we dont have postprecessing template)
+
+		# before the keys offsetToStartOfAnalysisInHours,offsetToStartOfForecastFillupInHours,offsetTimeIncrementInHours
+       	set marsClass=43;
+	    set backgroundProcess=147; # Always 147 except for the version 2.1 with lisflood-htessel
+        set generatingProcessIdentifier=41; #Latest version of glofas 'v4-glofas'
+		transient anoffsetFirst_tmp = anoffsetFirst;
+		transient anoffsetLast_tmp = anoffsetLast;
+		transient anoffsetFrequency_temp=anoffsetFrequency;
+        set grib2LocalSectionNumber=46; # for efas and glofas reforecasts but it should be after the keys :anoffsetFirst,anoffsetLast,anoffsetFrequency and 
+		# before the keys offsetToStartOfAnalysisInHours,offsetToStartOfForecastFillupInHours,offsetTimeIncrementInHours
+		set offsetToStartOfAnalysisInHours=anoffsetFirst_tmp;
+		set offsetToStartOfForecastFillupInHours=anoffsetLast_tmp;
+		set offsetTimeIncrementInHours=anoffsetFrequency_temp;
+        set inputOriginatingCentre=inputOriginatingCentre_temp;
+        set inputProcessIdentifier=inputProcessIdentifier_temp;
+
+		set marsStream = 1120;
+		set typeOfGeneratingProcess = 15;  # Hindcast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+        set YearOfModelVersion =0;
+        set MonthOfModelVersion = 0;
+        set DayOfModelVersion = 0;
+        switch (marsType)
+        {
+			case '10':
+				set typeOfEnsembleForecast = 5;  # Unperturbed forecast  https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
+				set typeOfProcessedData = 3; # Control forecast products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+			case '11':
+				set typeOfEnsembleForecast = 6; # Perturbed https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
+				set typeOfProcessedData = 4; # Perturbed forecast products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+
+			default:
+				set typeOfEnsembleForecast=255;
+	    }
+
+		switch (inputProcessIdentifier) {
+			case '154':
+			    #set inputModelVersion='9';
+				set inputProcessIdentifier=9;
+			case '158':
+				#set inputModelVersion='13';
+				set inputProcessIdentifier=13;
+			case '15421':
+				#set inputModelVersion='9';
+				set inputProcessIdentifier=9;
+			default:
+				set inputProcessIdentifier=0;
+					   }
+
+	}
+
+	write;
+}
