@@ -51,14 +51,14 @@ if ( marsClass == 35 )
                        # set inputModelVersion='8';
 						set inputProcessIdentifier=8;
 					case '1':
-						#set inputModelVersion='3500';
-						set inputProcessIdentifier=3500;
+						#set inputModelVersion='1500';
+						set inputProcessIdentifier=1500;
 					case '119':
-						#set inputModelVersion='3500';
-						set inputProcessIdentifier=3500;
+						#set inputModelVersion='1500';
+						set inputProcessIdentifier=1500;
 					case '120':
-						#set inputModelVersion='3500';
-						set inputProcessIdentifier=3500;
+						#set inputModelVersion='1500';
+						set inputProcessIdentifier=1500;
 					default:
 						set inputProcessIdentifier='0';
 					   }
@@ -102,14 +102,14 @@ if ( marsClass == 35 )
 
 				switch (inputProcessIdentifier) {
 					case '131':
-                        # set inputModelVersion='3000';
-						set inputProcessIdentifier=3000;
+                        # set inputModelVersion='1000';
+						set inputProcessIdentifier=1000;
 					case '13119':
-						#set inputModelVersion='3000';
-						set inputProcessIdentifier=3000;
+						#set inputModelVersion='1000';
+						set inputProcessIdentifier=1000;
 					case '13120':
-						#set inputModelVersion='3000';
-						set inputProcessIdentifier=3000;
+						#set inputModelVersion='1000';
+						set inputProcessIdentifier=1000;
 					case '15319':
 						#set inputModelVersion='8';
 						set inputProcessIdentifier=8;
@@ -130,8 +130,8 @@ if ( marsClass == 35 )
 				set typeOfProcessedData = 0; # analysis product https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
 				switch (inputProcessIdentifier) {
 					case '1':
-						#set inputModelVersion='3500';
-						set inputProcessIdentifier=3500;
+						#set inputModelVersion='1500';
+						set inputProcessIdentifier=1500;
 					case '158':
 						#set inputModelVersion='13';
 						set inputProcessIdentifier=13;
@@ -161,7 +161,7 @@ if ( marsClass == 35 )
                         set marsStream = 1256;
                         set typeOfGeneratingProcess = 9;  # Climatology https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
                         set typeOfProcessedData = 0; # Analysis product https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
-                        set inputProcessIdentifier=65100; #7 stands for 'OBS' : first table of section 2.2 https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100;
+                        set inputProcessIdentifier=65534; #7 stands for 'OBS' : first table of section 2.2 https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100;
             }
 
 		# Seasonal and seasonal reforecasts (The seas5 dataset has its own versions)

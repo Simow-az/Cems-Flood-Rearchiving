@@ -1,0 +1,46 @@
+set tablesVersion=36; # Latest table
+set experimentVersionNumber=0001; 
+set hoursAfterDataCutoff=MISSING; # Should be missing for forecasts
+set minutesAfterDataCutoff=MISSING; # Should be missing for forecasts
+if(defined(typeOfStatisticalProcessing)){
+            set typeOfTimeIncrement = 2; } # it was incorrecte before (3) https://confluence.ecmwf.int/pages/viewpage.action?pageId=363863394
+
+set typeOfProcessedData=1;  #Forecast products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+set productDefinitionTemplateNumber=73; #[Post-processing individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer, in a continuous or non-continuous time interval (grib2/tables/36/4.0.table) ]
+
+switch (perturbationNumber) {
+	case '0':
+		set typeOfEnsembleForecast=5;
+
+	default:
+		set typeOfEnsembleForecast=6;
+
+	}
+set inputOriginatingCentre=98;
+#New hydro local concept : branch Hydro-flat-list
+set inputProcessIdentifier=2; #cy43r1 https://github.com/ecmwf/eccodes/blob/feature/hydro_flat_list/definitions/grib2/localConcepts/hydro/inputModelVersionConcept.def
+
+set typeOfProcessedData=1; #forecast : https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+set marsClass='gh'; #C3S Global
+set marsStream ='mmsf'; # Multi-model seasonal forecast https://github.com/ecmwf/eccodes/blob/develop/definitions/mars/stream.table
+
+
+set typeOfPostProcessing=0; # None https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
+set typeOfGeneratingProcess=2; # Forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+set backgroundProcess=147; #Always lisflood for glofas 3.1 onward https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
+set generatingProcessIdentifier=41; #Latest version of glofas 'v4-glofas' https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
+set experimentVersionNumber=0001; # For the new datasets we start by expver=1 for the existing datasets we keep the same expver
+set inputOriginatingCentre=98;
+
+#transient anoffsetFirst_tmp = anoffsetFirst; # the LocalSection has these keys for all glofas streams
+#transient anoffsetLast_tmp = anoffsetLast;# the LocalSection has these keys for all glofas streams
+#transient anoffsetFrequency_temp=anoffsetFrequency;#the LocalSection has these keys for all glofas streams
+
+set grib2LocalSectionNumber=44; # for efas and glofas (Except the reforecast which is using 46) but it should be after the keys :anoffsetFirst,anoffsetLast,anoffsetFrequency and 
+# before the keys offsetToStartOfAnalysisInHours,offsetToStartOfForecastFillupInHours,offsetTimeIncrementInHours
+
+#set offsetToStartOfAnalysisInHours=anoffsetFirst_tmp;
+#set offsetToStartOfForecastFillupInHours=anoffsetLast_tmp;
+#set offsetTimeIncrementInHours=anoffsetFrequency_temp;
+
+write;
