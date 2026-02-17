@@ -151,7 +151,7 @@ if ( marsClass == 35 )
 				 set marsStream = 1025;
 				 set typeOfGeneratingProcess = 0;  # Analysis https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
 				 set typeOfProcessedData = 0; # analysis product https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
-				 set inputProcessIdentifier=65100;
+				 set inputProcessIdentifier=65534;
 			}
 
 	    }
@@ -270,7 +270,6 @@ if ( marsClass == 35 )
 		set offsetToStartOfAnalysisInHours=anoffsetFirst_tmp;
 		set offsetToStartOfForecastFillupInHours=anoffsetLast_tmp;
 		set offsetTimeIncrementInHours=anoffsetFrequency_temp;
-	    # Glofas control/perturb/fillup/sfo
 		# the SFO needs the version of ERA5 used and not the IFS,We have to find a solution to replace it
 
 		if(marsStream == 1060) 
@@ -315,7 +314,7 @@ if ( marsClass == 35 )
 						#set inputModelVersion='9';
 				        set inputProcessIdentifier=9;
 					case '145':
-						set inputProcessIdentifier=65000;  # SFO : The inputProcessIdentifier was never set to the ERA5 generatingProcessIdentifier; instead, the IFS generatingProcessIdentifier was used.
+						set inputProcessIdentifier=65533;  # SFO : The inputProcessIdentifier was never set to the ERA5 generatingProcessIdentifier; instead, the IFS generatingProcessIdentifier was used.
 					
 					default:
 						set inputProcessIdentifier='0';
@@ -330,10 +329,10 @@ if ( marsClass == 35 )
 				set typeOfProcessedData = 0; # Analysis https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table   	
 				switch (inputProcessIdentifier) {
 					case '145':
-						set inputProcessIdentifier=65000; # 5 here refers to ERA5 generatingProcessIdentifier
+						set inputProcessIdentifier=65533; # 5 here refers to ERA5 generatingProcessIdentifier
 					case '147':
 						#set inputModelVersion='2';
-				        set inputProcessIdentifier=65000;
+				        set inputProcessIdentifier=65533;
 					default:
 						set inputProcessIdentifier=0;
 					   }
@@ -360,6 +359,7 @@ if ( marsClass == 35 )
 	 }
 
 	# Dealing differently with the reforecast as the template is different from all the other datasets 
+	# Dealing differently with the reforecast as the template is different from all the other datasets 
 	if(marsStream == 1065) {
         transient inputOriginatingCentre_temp=inputOriginatingCentre;
         transient inputProcessIdentifier_temp=inputProcessIdentifier;
@@ -382,9 +382,9 @@ if ( marsClass == 35 )
 
 		set marsStream = 1120;
 		set typeOfGeneratingProcess = 15;  # Hindcast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
-        set YearOfModelVersion =0;
-        set MonthOfModelVersion = 0;
-        set DayOfModelVersion = 0;
+        set YearOfModelVersion =2024;
+        set MonthOfModelVersion = 3;
+        set DayOfModelVersion = 2;
         switch (marsType)
         {
 			case '10':
@@ -413,6 +413,7 @@ if ( marsClass == 35 )
 					   }
 
 	}
+
 
 	write;
 }

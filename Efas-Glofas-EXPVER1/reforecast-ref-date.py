@@ -51,6 +51,8 @@ def update_one_file(INPUT, OUTPUT):
                 month = int(codes_get(gid, "month"))
                 year  = int(codes_get(gid, "year"))
                 day   = int(codes_get(gid, "day"))
+                print('month,year and day done')
+             
 
                 msg_date = datetime(year, month, day).date()
 

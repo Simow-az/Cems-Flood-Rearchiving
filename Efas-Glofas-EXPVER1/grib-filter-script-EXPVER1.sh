@@ -1,6 +1,6 @@
 #!/bin/bash
-INPUT_FOLDER="/perm/ecm3644/CEMS-FLOOD-DATA-SAMPLES/Samples-EXPVER1"
-RULES_path="/perm/ecm3644/CEMS-FLOOD-DATA-SAMPLES/Samples-EXPVER1"
+INPUT_FOLDER="/perm/ecm3644/CEMS-FLOOD-DATA-SAMPLES/Samples-Hydro-Branch/Efas-Glofas-EXPVER1"
+RULES_path="/perm/ecm3644/CEMS-FLOOD-DATA-SAMPLES/Samples-Hydro-Branch/Efas-Glofas-EXPVER1"
 grib_filter_path="/perm/maro/ecc_hydro_cems_c3s/adapted/bin"
 
 for file in "$INPUT_FOLDER"/*.grib; do

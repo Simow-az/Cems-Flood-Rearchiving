@@ -6,8 +6,8 @@ if(defined(typeOfStatisticalProcessing)){
             set typeOfTimeIncrement = 2; } # it was incorrecte before (3) https://confluence.ecmwf.int/pages/viewpage.action?pageId=363863394
 
 
-set typeOfProcessedData=1;#forecast : https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
-set marsClass=42; #All efas streams are moving into ef class
+set typeOfProcessedData=1; #forecast : https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+set marsClass=42; # All efas streams are moving into ef class
 set marsStream = 1122; # Extended ensemble prediction system https://github.com/ecmwf/eccodes/blob/develop/definitions/mars/stream.table
 
 #New hydro local concept : branch Hydro-flat-list
