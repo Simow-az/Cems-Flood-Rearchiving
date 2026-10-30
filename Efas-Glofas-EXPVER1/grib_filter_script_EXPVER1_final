@@ -36,6 +36,7 @@ if ( marsClass == 35 )
 				set marsStream = 1025; # efas fc will move to oper fc
 				set typeOfGeneratingProcess = 2;  # Forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
 				set typeOfProcessedData = 1; # Forecast products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+				# https://github.com/ecmwf/eccodes/blob/2.46.0/definitions/grib2/localConcepts/hydro/inputModelVersionConcept.def
 
 				switch (inputProcessIdentifier) { # The mars key 'Forcing' is based on the inputProcessIdentifier the first number is for the model and the last three numbers for the version the origin will be center-model (ecmf-ifs)
  					case '158':
@@ -408,6 +409,9 @@ if ( marsClass == 35 )
 			case '15421':
 				#set inputModelVersion='9';
 				set inputProcessIdentifier=9;
+		    case '15305':
+				#set inputModelVersion='8';
+				set inputProcessIdentifier=8;
 			default:
 				set inputProcessIdentifier=0;
 					   }

@@ -14,9 +14,9 @@ set marsStream = 1122; # Extended ensemble prediction system https://github.com/
 set inputProcessIdentifier=13; #im assuming that its 49r1, But its better to get the value from the forcings generatingProcessIdentifier: https://github.com/ecmwf/eccodes/blob/feature/hydro_flat_list/definitions/grib2/localConcepts/hydro/inputModelVersionConcept.def
 
 set typeOfPostProcessing=0; # Stitched NWP https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
-set typeOfGeneratingProcess=2;# Forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+set typeOfGeneratingProcess=4;# Ensemble Forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L6
 set backgroundProcess=147; #Always lisflood for glofas 3.1 onward https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
-set generatingProcessIdentifier=41; #Latest version of glofas 'v4-glofas' https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
+set generatingProcessIdentifier=42; #Latest version of glofas 'v5-glofas' https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
 set experimentVersionNumber=0001; # For the new datasets we start by expver=1 for the existing datasets we keep the same expver
 set inputOriginatingCentre=98;
 
