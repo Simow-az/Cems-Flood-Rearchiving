@@ -260,6 +260,7 @@ if ( marsClass == 35 )
 	    set marsClass=43;
 	    set backgroundProcess=147; # Always 147 except for the version 2.1 with lisflood-htessel
         set generatingProcessIdentifier=41; #Latest version of glofas 'v4-glofas'
+        set typeOfPostProcessing=0; #None (All Glofas streams except the ensemble forecast for version 4 where it should be 1 Stitched NWP 24h lagged forcings https://confluence.ecmwf.int/spaces/EVAL/pages/435823100/Implementation+of+modelname+modelversion+and+the+forcings+for+CEMS-Flood+Datasets)
 
 		transient anoffsetFirst_tmp = anoffsetFirst;
 		transient anoffsetLast_tmp = anoffsetLast;
@@ -276,6 +277,7 @@ if ( marsClass == 35 )
 		if(marsStream == 1060) 
 			{
 				set marsStream = 1035; #enfo Ensemble prediction system
+				set typeOfPostProcessing=1; #None (All Glofas streams except the ensemble forecast for version 4 where it should be 1 Stitched NWP 24h lagged forcings https://confluence.ecmwf.int/spaces/EVAL/pages/435823100/Implementation+of+modelname+modelversion+and+the+forcings+for+CEMS-Flood+Datasets)
 				
 				switch (marsType){
 					case '10':
@@ -398,6 +400,8 @@ if ( marsClass == 35 )
 			default:
 				set typeOfEnsembleForecast=255;
 	    }
+	    
+	    set typeOfPostProcessing=0 ; # None : https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
 
 		switch (inputProcessIdentifier) {
 			case '154':
