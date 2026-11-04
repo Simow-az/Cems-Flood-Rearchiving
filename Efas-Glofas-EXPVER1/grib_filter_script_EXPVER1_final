@@ -1,6 +1,7 @@
 set tablesVersion=36; # Latest table
 set experimentVersionNumber=0001; 
 set hoursAfterDataCutoff=MISSING; # Should be missing for forecasts
+
 set minutesAfterDataCutoff=MISSING; # Should be missing for forecasts
 if(defined(typeOfStatisticalProcessing)){
             set typeOfTimeIncrement = 2; } # it was incorrecte before (3) https://confluence.ecmwf.int/pages/viewpage.action?pageId=363863394
@@ -60,8 +61,7 @@ if ( marsClass == 35 )
 					case '120':
 						#set inputModelVersion='1500';
 						set inputProcessIdentifier=1500;
-					default:
-						set inputProcessIdentifier='0';
+
 					   }
 			}
 			# CF
@@ -90,8 +90,7 @@ if ( marsClass == 35 )
 					case '158':
 					    #set inputModelVersion='13';
 						set inputProcessIdentifier=13;
-					default:
-					    set inputProcessIdentifier=0;
+
 					   }
 			}
 			# PF
@@ -120,8 +119,7 @@ if ( marsClass == 35 )
 					case '158':
 						#set inputModelVersion='13';
 						set inputProcessIdentifier=13;
-					default:
-					 set inputProcessIdentifier=0;
+
 					   }
 			}
 			# Fill-Up
@@ -142,8 +140,7 @@ if ( marsClass == 35 )
 					case '15420':
 						#set inputModelVersion='9';
 						set inputProcessIdentifier=9; 
-					default:
-						set inputProcessIdentifier=0;
+
 					   }
 			}
 			# SFO
@@ -169,7 +166,7 @@ if ( marsClass == 35 )
 		if(marsStream == 1058 || marsStream == 1064) 
             {
                     set marsStream = 1220;
-                    set typeOfGeneratingProcess = 2;  # Forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+                    set typeOfGeneratingProcess = 4;  # Ensemble forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
                     set typeOfProcessedData = 1; # Forecast product https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
 
                     
@@ -180,10 +177,17 @@ if ( marsClass == 35 )
                         case '14719':
                          #   set inputModelVersion='2';
 						    set inputProcessIdentifier=2;
-                        default:
-                            set inputProcessIdentifier=0;
-                          #  set inputModelVersion='0';
+
                     }
+                    
+                    
+                    switch(perturbationNumber){
+                        case '0': 
+                            set typeOfEnsembleForecast=8; # https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
+                        default:
+                            set typeOfEnsembleForecast=9; # https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
+                    }
+                    
             }
     }
     if (marsStream == 1063)# reforecasts
@@ -216,9 +220,6 @@ if ( marsClass == 35 )
         set inputProcessIdentifier=inputProcessIdentifier_temp;
 
 
-
-
-		
 		set typeOfGeneratingProcess = 15;  # Hindcast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
         set YearOfModelVersion =2024;
         set MonthOfModelVersion = 3;
@@ -233,8 +234,6 @@ if ( marsClass == 35 )
 				set typeOfEnsembleForecast = 6; # Perturbed https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
 				set typeOfProcessedData = 4; # Perturbed forecast products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
 
-			default:
-				set typeOfEnsembleForecast=255;
 	    }
 		switch (inputProcessIdentifier_temp) {
 			case '158':
@@ -246,9 +245,7 @@ if ( marsClass == 35 )
 			case '15420':
 				#set inputModelVersion='9';
 				set inputProcessIdentifier=9;
-			default:
-				set inputProcessIdentifier=0;
-               # set inputModelVersion='0';
+
 			}
     }
 
@@ -277,15 +274,17 @@ if ( marsClass == 35 )
 		if(marsStream == 1060) 
 			{
 				set marsStream = 1035; #enfo Ensemble prediction system
-				set typeOfPostProcessing=1; #None (All Glofas streams except the ensemble forecast for version 4 where it should be 1 Stitched NWP 24h lagged forcings https://confluence.ecmwf.int/spaces/EVAL/pages/435823100/Implementation+of+modelname+modelversion+and+the+forcings+for+CEMS-Flood+Datasets)
+				
 				
 				switch (marsType){
 					case '10':
+					    set typeOfPostProcessing=1; #None (All Glofas streams except the ensemble forecast for version 4 where it should be 1 Stitched NWP 24h lagged forcings https://confluence.ecmwf.int/spaces/EVAL/pages/435823100/Implementation+of+modelname+modelversion+and+the+forcings+for+CEMS-Flood+Datasets)
 						set typeOfEnsembleForecast = 5; #Control forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
 				        set typeOfProcessedData = 3; # Control https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
 						set typeOfGeneratingProcess = 4;  # Ensemble forecast for both types cf/pf  https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
                         set typeOfPostProcessing=1 ; # Stitched NWP 24h lagged forcings : https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
 					case '11':
+					    set typeOfPostProcessing=1; #None (All Glofas streams except the ensemble forecast for version 4 where it should be 1 Stitched NWP 24h lagged forcings https://confluence.ecmwf.int/spaces/EVAL/pages/435823100/Implementation+of+modelname+modelversion+and+the+forcings+for+CEMS-Flood+Datasets)
 						set typeOfEnsembleForecast = 6; # Perturbed forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
 				        set typeOfProcessedData = 4; # Perturbed https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
 						set typeOfGeneratingProcess = 4;  # ensemble forecast for both types cf/pf  https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
@@ -298,10 +297,6 @@ if ( marsClass == 35 )
 						set typeOfProcessedData = 0; # Analysis products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
 						set typeOfGeneratingProcess = 0;  # Analysis  https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
                         set typeOfEnsembleForecast = Missing;
-
-					default:
-						set typeOfGeneratingProcess = 255;
-						set typeOfProcessedData = 255;
 
 					   }
 			
@@ -318,9 +313,7 @@ if ( marsClass == 35 )
 				        set inputProcessIdentifier=9;
 					case '145':
 						set inputProcessIdentifier=65533;  # SFO : The inputProcessIdentifier was never set to the ERA5 generatingProcessIdentifier; instead, the IFS generatingProcessIdentifier was used.
-					
-					default:
-						set inputProcessIdentifier='0';
+
 					   }
 
 			 }
@@ -336,26 +329,30 @@ if ( marsClass == 35 )
 					case '147':
 						#set inputModelVersion='2';
 				        set inputProcessIdentifier=65533;
-					default:
-						set inputProcessIdentifier=0;
+
 					   }
 
 			}
 
-		# Seasonal
+		# Seasonal and seasonal reforecast
 		if(marsStream == 1062 || marsStream == 1066 ) 
 			{
 				set marsStream = 1220;    # mmsf
-				set typeOfGeneratingProcess = 2;  # Forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
+				set typeOfGeneratingProcess = 4;  # Ensemble forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
 				set typeOfProcessedData = 1; # Forecast product https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table 	
 				switch (inputProcessIdentifier) {
 					case '14703':
 						#set inputModelVersion='2';
 				        set inputProcessIdentifier=2;
 
-					default:
-						set inputProcessIdentifier=0;
 					   }
+					   
+		        switch(perturbationNumber){
+                        case '0': 
+                            set typeOfEnsembleForecast=8; # https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
+                        default:
+                            set typeOfEnsembleForecast=9; # https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
+                    }
 
 			 }
 
@@ -397,8 +394,7 @@ if ( marsClass == 35 )
 				set typeOfEnsembleForecast = 6; # Perturbed https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
 				set typeOfProcessedData = 4; # Perturbed forecast products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
 
-			default:
-				set typeOfEnsembleForecast=255;
+
 	    }
 	    
 	    set typeOfPostProcessing=0 ; # None : https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
@@ -416,8 +412,7 @@ if ( marsClass == 35 )
 		    case '15305':
 				#set inputModelVersion='8';
 				set inputProcessIdentifier=8;
-			default:
-				set inputProcessIdentifier=0;
+
 					   }
 
 	}
