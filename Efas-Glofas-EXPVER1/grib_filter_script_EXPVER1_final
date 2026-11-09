@@ -1,4 +1,4 @@
-set tablesVersion=36; # Latest table
+set tablesVersion=37; # Latest table
 set experimentVersionNumber=0001; 
 set hoursAfterDataCutoff=MISSING; # Should be missing for forecasts
 
