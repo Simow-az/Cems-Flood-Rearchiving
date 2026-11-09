@@ -339,7 +339,8 @@ if ( marsClass == 35 )
 			{
 				set marsStream = 1220;    # mmsf
 				set typeOfGeneratingProcess = 4;  # Ensemble forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
-				set typeOfProcessedData = 1; # Forecast product https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table 	
+				set typeOfProcessedData = 1; # Forecast product https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
+				set numberOfForecastsInEnsemble=51; 	
 				switch (inputProcessIdentifier) {
 					case '14703':
 						#set inputModelVersion='2';
