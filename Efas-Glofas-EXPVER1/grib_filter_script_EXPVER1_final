@@ -355,6 +355,12 @@ if ( marsClass == 35 )
                             set typeOfEnsembleForecast=9; # https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
                     }
 
+
+				if (marsStream == 1220) {
+						transient es = endStep;
+						set endStep = es;
+                    }
+
 			 }
 
 	 }
