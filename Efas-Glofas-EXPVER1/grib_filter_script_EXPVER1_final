@@ -227,10 +227,10 @@ if ( marsClass == 35 )
 
 		switch (marsType)
         {
-			case '10':
+			case 'cf':
 				set typeOfEnsembleForecast = 5;  # Unperturbed forecast  https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
 				set typeOfProcessedData = 3; # Control forecast products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
-			case '11':
+			case 'pf':
 				set typeOfEnsembleForecast = 6; # Perturbed https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
 				set typeOfProcessedData = 4; # Perturbed forecast products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
 
@@ -277,23 +277,23 @@ if ( marsClass == 35 )
 				
 				
 				switch (marsType){
-					case '10':
+					case 'cf':
 					    set typeOfPostProcessing=1; #None (All Glofas streams except the ensemble forecast for version 4 where it should be 1 Stitched NWP 24h lagged forcings https://confluence.ecmwf.int/spaces/EVAL/pages/435823100/Implementation+of+modelname+modelversion+and+the+forcings+for+CEMS-Flood+Datasets)
 						set typeOfEnsembleForecast = 5; #Control forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
 				        set typeOfProcessedData = 3; # Control https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
 						set typeOfGeneratingProcess = 4;  # Ensemble forecast for both types cf/pf  https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
                         set typeOfPostProcessing=1 ; # Stitched NWP 24h lagged forcings : https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
-					case '11':
+					case 'pf':
 					    set typeOfPostProcessing=1; #None (All Glofas streams except the ensemble forecast for version 4 where it should be 1 Stitched NWP 24h lagged forcings https://confluence.ecmwf.int/spaces/EVAL/pages/435823100/Implementation+of+modelname+modelversion+and+the+forcings+for+CEMS-Flood+Datasets)
 						set typeOfEnsembleForecast = 6; # Perturbed forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
 				        set typeOfProcessedData = 4; # Perturbed https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
 						set typeOfGeneratingProcess = 4;  # ensemble forecast for both types cf/pf  https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
                         set typeOfPostProcessing=1 ; # Stitched NWP 24h lagged forcings : https://confluence.ecmwf.int/pages/viewpage.action?pageId=435823100
-					case '72':
+					case 'fu':
 				        set typeOfProcessedData = 0; # Analysis products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
 						set typeOfGeneratingProcess = 0;  # Analysis  https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
                         set typeOfEnsembleForecast = Missing;
-					case '73':
+					case 'sfo':
 						set typeOfProcessedData = 0; # Analysis products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
 						set typeOfGeneratingProcess = 0;  # Analysis  https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
                         set typeOfEnsembleForecast = Missing;
@@ -394,10 +394,10 @@ if ( marsClass == 35 )
         set DayOfModelVersion = 2;
         switch (marsType)
         {
-			case '10':
+			case 'cf':
 				set typeOfEnsembleForecast = 5;  # Unperturbed forecast  https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
 				set typeOfProcessedData = 3; # Control forecast products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
-			case '11':
+			case 'pf':
 				set typeOfEnsembleForecast = 6; # Perturbed https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_6_CodeTable_en.csv#L8
 				set typeOfProcessedData = 4; # Perturbed forecast products https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
 
