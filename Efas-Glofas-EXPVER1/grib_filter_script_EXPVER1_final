@@ -337,10 +337,14 @@ if ( marsClass == 35 )
 		# Seasonal and seasonal reforecast
 		if(marsStream == 1062 || marsStream == 1066 ) 
 			{
+				if (marsStream == 1066 && dataDate < 20170101) {
+					set numberOfForecastsInEnsemble = 25; # seasonal reforecast hdates before 2017 have 25 members
+				} else {
+					set numberOfForecastsInEnsemble = 51;
+				}
 				set marsStream = 1220;    # mmsf
 				set typeOfGeneratingProcess = 4;  # Ensemble forecast https://github.com/wmo-im/GRIB2/blob/master/GRIB2_CodeFlag_4_3_CodeTable_en.csv#L11
 				set typeOfProcessedData = 1; # Forecast product https://github.com/ecmwf/eccodes/blob/develop/definitions/grib2/tables/35/1.4.table
-				set numberOfForecastsInEnsemble=51; 	
 				switch (inputProcessIdentifier) {
 					case '14703':
 						#set inputModelVersion='2';
